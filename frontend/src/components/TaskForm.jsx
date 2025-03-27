@@ -5,55 +5,61 @@ import { parseCookies } from 'nookies';
 const TaskForm = ({ fetchTasks }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  
-  // Obtener el id_user desde la cookie
   const cookies = parseCookies();
   const id_user = cookies.id_user;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Crear el cuerpo con el id_user y los demás campos
-      await axios.post('/api/tasks', { 
-        title, 
-        description, 
-        completed: false, 
-        id_user 
+      await axios.post('/api/tasks', {
+        title,
+        description,
+        completed: false,
+        id_user
       });
       setTitle('');
       setDescription('');
-      fetchTasks(); // Actualizar la lista de tareas
+      fetchTasks();
     } catch (error) {
       console.error('Error creating task:', error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-8 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-xl shadow-lg space-y-6">
-      <h2 className="text-3xl font-semibold text-white text-center">Crear Nueva Tarea</h2>
+    <form
+      onSubmit={handleSubmit}
+      className="gradient-form max-w-2xl mx-auto p-8 rounded-2xl shadow-2xl space-y-6 mb-12 bg-gradient-to-tr from-indigo-500/90 via-purple-500/90 to-pink-500/90 backdrop-blur-sm"
+    >
+      <h2 className="text-4xl font-bold text-white text-center drop-shadow-md">
+        ✨ Nueva Tarea
+      </h2>
+      
       <input
         type="text"
-        placeholder="Título de la tarea"
+        placeholder="Título"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
-        className="w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300"
+        className="w-full p-4 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
       />
+      
       <textarea
-        placeholder="Descripción de la tarea"
+        placeholder="Descripción"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         required
-        className="w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300"
+        className="w-full p-4 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
       />
-      <button 
-        type="submit" 
-        className="w-full p-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition duration-300"
+      
+      <button
+        type="submit"
+        className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-all"
       >
-        Agregar Tarea
+        Crear Tarea
       </button>
     </form>
   );
 };
 
 export default TaskForm;
+  

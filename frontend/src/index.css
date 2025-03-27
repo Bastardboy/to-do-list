@@ -2,98 +2,160 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Corrección de .technologies-view */
+.technologies-view .grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem; /* gap-6 */
+}
+
+@media (min-width: 768px) {
+  .technologies-view .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* md:grid-cols-2 */
+  }
+}
+
+@media (min-width: 1024px) {
+  .technologies-view .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)); /* lg:grid-cols-3 */
+  }
+}
+
+/* Corrección de .theme-switcher */
+.theme-switcher button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem; /* w-10 */
+  height: 1.5rem; /* h-6 */
+  background-color: #d1d5db; /* bg-gray-300 */
+  border-radius: 9999px; /* rounded-full */
+  cursor: pointer;
+  transition: all 0.3s ease-in-out; /* transition-all duration-300 */
+}
+
+.theme-switcher button:hover {
+  background-color: #d1d5db; /* bg-gray-400 */
+}
+
+.theme-switcher button.dark {
+  background-color: #4b5563; /* dark:bg-gray-600 */
+}
+
+.theme-switcher button .toggle-thumb {
+  position: absolute;
+  top: 0.25rem; /* top-1 */
+  left: 0.25rem; /* left-1 */
+  width: 1.25rem; /* w-5 */
+  height: 1.25rem; /* h-5 */
+  background-color: #ffffff; /* bg-white */
+  border-radius: 9999px; /* rounded-full */
+  transition: transform 0.3s ease-in-out; /* transition-transform duration-300 */
+}
+
+.theme-switcher button .toggle-thumb.translate-x-5 {
+  transform: translateX(1.25rem); /* translate-x-5 */
+}
+
+.theme-switcher button .toggle-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #6b7280; /* bg-gray-500 */
+  border-radius: 9999px; /* rounded-full */
+}
+
+/* Corrección de transiciones */
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.3s ease-out; /* transition-all duration-300 ease-out */
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0; /* opacity-0 */
+  transform: translateY(0.5rem); /* translate-y-2 */
+}
+
+/* Variables CSS para temas claros y oscuros */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  --background-color: #f0f0f0;
+  --text-color: #1a202c;
+  --card-color: #ffffff;
+  --accent-color: #3b82f6;
+  --header-color: #161b22;
+}
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+.dark {
+  --background-color: #1a202c;
+  --text-color: #e2e8f0;
+  --card-color: #2d3748;
+  --accent-color: #60a5fa;
+  --header-color: #161b22;
+}
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Corrección de html y body */
+html {
+  background-color: var(--background-color);
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
 }
 
 body {
-  margin: 0;
   display: flex;
-  place-items: center;
-  min-width: 320px;
+  flex-direction: column;
+  justify-content: space-between;
   min-height: 100vh;
-  background-color: #f4f4f4; /* Fondo claro para mejor contraste */
-  color: #333; /* Texto oscuro para mejor visibilidad */
+  font-family: sans-serif;
+  transition: all 0.3s ease-in-out;
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-  color: #333; /* Aseguramos que el h1 tenga color oscuro */
+/* Corrección de footer */
+footer {
+  padding: 1rem; /* p-4 */
+  text-align: center; /* text-center */
+  color: #ffffff; /* text-white */
+  background-color: #4f46e5; /* bg-indigo-600 */
 }
 
-a {
-  font-weight: 500;
-  color: #1D4ED8; /* Color azul llamativo */
-  text-decoration: inherit;
-}
-a:hover {
-  color: #2563EB; /* Azul más oscuro al hacer hover */
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1D4ED8; /* Azul para el fondo del botón */
-  color: white;
+/* Corrección de .card */
+.card {
+  padding: 1.5rem; /* p-6 */
+  border-radius: 0.75rem; /* rounded-lg */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+  transition: all 0.3s ease-in-out; /* transition-all duration-300 ease-in-out */
   cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  background-color: var(--card-color);
+  color: var(--text-color);
 }
 
-button:hover {
-  background-color: #2563EB; /* Azul más oscuro para hover */
-  border-color: #1D4ED8;
+.card:hover {
+  transform: translateY(0.5rem); /* translate-y-2 */
+  box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.1), 0 6px 8px -2px rgba(0, 0, 0, 0.05); /* hover:shadow-2xl */
 }
 
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+/* Corrección de enlaces de navegación */
+.nav-link {
+  font-weight: 500; /* font-medium */
+  letter-spacing: 0.05em; /* tracking-wide */
 }
 
-/* Modo oscuro */
-@media (prefers-color-scheme: dark) {
-  :root {
-    color: #E5E7EB; /* Texto claro */
-    background-color: #121212; /* Fondo oscuro */
-  }
+.nav-link-mobile {
+  font-size: 0.875rem; /* text-sm */
+  letter-spacing: 0.1em; /* tracking-wider */
+}
 
-  body {
-    background-color: #121212;
-    color: #E5E7EB;
-  }
-
-  h1 {
-    color: #E5E7EB; /* H1 claro en el modo oscuro */
-  }
-
-  a {
-    color: #60A5FA; /* Azul claro para enlaces en modo oscuro */
-  }
-  a:hover {
-    color: #93C5FD; /* Azul más claro al hacer hover */
-  }
-
-  button {
-    background-color: #1D4ED8;
-    color: white;
-  }
-
-  button:hover {
-    background-color: #2563EB;
+/* Corrección de soporte para fuentes variables */
+@supports (font-variation-settings: normal) {
+  .nav-link, .nav-link-mobile {
+    font-family: 'Inter', var(--font-inter);
   }
 }

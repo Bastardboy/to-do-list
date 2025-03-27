@@ -1,19 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import TaskList from './components/TaskList';
 import TaskForm from './components/TaskForm';
 
 const App = () => {
-  const [refresh, setRefresh] = useState(false);
+  const [tasks, setTasks] = useState([]);
 
-  const fetchTasks = () => {
-    setRefresh(!refresh); 
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get('/api/tasks');
+      setTasks(response.data);
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    }
+  };
+
+  const fetchDelete = async () =>{
+    try {
+      await axios.delete('/api/delete');
+      fetchTasks();
+    } catch (error){
+      console.error('Error fetching delete:', error);
+    }
   };
 
   return (
     <div>
-      <h1>To-Do App</h1>
-      <TaskForm fetchTasks={fetchTasks} />
-      <TaskList />
+      <div className="App">
+        <TaskForm fetchTasks={fetchTasks} /> 
+        <TaskList tasks={tasks} fetchDelete={fetchDelete} fetchTasks={fetchTasks}/>
+      </div>
     </div>
   );
 };

@@ -1,30 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { Card } from 'flowbite-react';
+import TaskDelete from './TaskDelete';
 
-const TaskList = () => {
-  const [tasks, setTasks] = useState([]);
-
-  useEffect(() => {
-    fetchTasks();
-  }, []);
-
-  const fetchTasks = async () => {
-    try {
-      const response = await axios.get('/api/tasks');
-      setTasks(response.data);
-    } catch (error) {
-      console.error('Error fetching tasks:', error);
-    }
-  };
-
+const TaskList = ({ tasks, fetchDelete, fetchTasks }) => {
   return (
     <div>
-      <h2>Lista de Tareas</h2>
-      {tasks.map(task => (
-        <div key={task._id}>
-          <h3>{task.title}</h3>
-          <p>{task.completed ? 'Completada' : 'Pendiente'}</p>
-        </div>
+      {tasks.map((task) => (
+        <Card key={task._id} className="max-w-sm mb-4">
+          <h5 className="text-2xl font-bold">{task.title}</h5>
+          <p>{task.description}</p>
+          <TaskDelete _id={task._id} fetchDelete={fetchDelete} fetchTasks={fetchTasks} /> 
+        </Card>
       ))}
     </div>
   );

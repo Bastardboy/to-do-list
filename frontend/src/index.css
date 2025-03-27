@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -13,26 +17,29 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
 body {
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #f4f4f4; /* Fondo claro para mejor contraste */
+  color: #333; /* Texto oscuro para mejor visibilidad */
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  color: #333; /* Aseguramos que el h1 tenga color oscuro */
+}
+
+a {
+  font-weight: 500;
+  color: #1D4ED8; /* Color azul llamativo */
+  text-decoration: inherit;
+}
+a:hover {
+  color: #2563EB; /* Azul más oscuro al hacer hover */
 }
 
 button {
@@ -42,27 +49,51 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #1D4ED8; /* Azul para el fondo del botón */
+  color: white;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
+
 button:hover {
-  border-color: #646cff;
+  background-color: #2563EB; /* Azul más oscuro para hover */
+  border-color: #1D4ED8;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: #E5E7EB; /* Texto claro */
+    background-color: #121212; /* Fondo oscuro */
+  }
+
+  body {
+    background-color: #121212;
+    color: #E5E7EB;
+  }
+
+  h1 {
+    color: #E5E7EB; /* H1 claro en el modo oscuro */
+  }
+
+  a {
+    color: #60A5FA; /* Azul claro para enlaces en modo oscuro */
   }
   a:hover {
-    color: #747bff;
+    color: #93C5FD; /* Azul más claro al hacer hover */
   }
+
   button {
-    background-color: #f9f9f9;
+    background-color: #1D4ED8;
+    color: white;
+  }
+
+  button:hover {
+    background-color: #2563EB;
   }
 }

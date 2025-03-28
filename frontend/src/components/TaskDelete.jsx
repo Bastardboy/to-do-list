@@ -24,7 +24,7 @@ const TaskDelete = ({ _id, fetchTasks }) => {
   return (
     <button
       onClick={handleDelete}
-      className="px-4 py-2 rounded-lg bg-red-500/90 hover:bg-red-600 text-white backdrop-blur-sm transition-all duration-200 hover:scale-[1.05] flex items-center gap-2"
+      className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -41,6 +41,7 @@ const TaskDelete = ({ _id, fetchTasks }) => {
       Eliminar
     </button>
   );
+  
 };
 
 export default TaskDelete;

@@ -9,7 +9,6 @@ export default {
     extend: {},
   },
   plugins: [
-    (require("flowbite/plugin")),
-
   ],
+  safelist: ["hover:scale-105",  "bg-red-500", "hover:bg-red-700", "bg-blue-500"]
 };

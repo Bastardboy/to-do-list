@@ -35,7 +35,7 @@ const App = () => {
         <h1 className="text-6xl font-bold text-center mb-12 bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
           📌 Organizador de Tareas
         </h1>
-        
+          
         <TaskForm fetchTasks={fetchTasks} />
         
         {tasks.length > 0 ? (

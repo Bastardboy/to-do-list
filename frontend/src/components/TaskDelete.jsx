@@ -5,8 +5,6 @@ import { parseCookies } from 'nookies';
 const TaskDelete = ({ _id, fetchTasks }) => {
   const handleDelete = async () => {
     try {
-      const cookies = parseCookies();
-
       await axios.delete('/api/delete', {
         data: { taskId: _id },
         headers: {

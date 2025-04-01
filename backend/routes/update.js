@@ -5,10 +5,9 @@ const { ObjectId } = require('mongodb');
 module.exports = (db) => {
     router.patch('/', async (req, res) => {
         const id_user = req.id_user;
-        const { taskId, ...updates } = req.body;
+        const { title, description } = req.body; // Desestructurar title y description directamente
 
-        console.log('Body:', req.body);
-        console.log('id_user:', id_user);
+        const taskId = req.body.taskId; // Obtener taskId desde el body
 
         if (!ObjectId.isValid(taskId)) {
             console.log("taskId inválido:", taskId);
@@ -17,20 +16,23 @@ module.exports = (db) => {
 
         const filter = { _id: new ObjectId(taskId), id_user };
 
-        updates.updatedAt = new Date();
-
-        const update = {
-            $set: {
-                title,
-                description,
-                completed: completed === true || completed === 'true', // por si viene como string
-                updatedAt: new Date(),
-            }
+        const updates = { 
+            title,
+            description,
+            updatedAt: new Date().toLocaleString('es-CL', { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit', 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit', 
+                timeZone: 'America/Santiago' 
+            }), // Asegúrate de actualizar la fecha de modificación
         };
 
         try {
-            const result = await db.collection('homeworks-list').updateOne(filter,{
-                $set: updates
+            const result = await db.collection('homeworks-list').updateOne(filter, {
+                $set: updates,
             });
 
             if (result.matchedCount === 0) {

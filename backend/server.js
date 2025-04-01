@@ -58,6 +58,9 @@ MongoClient.connect(MONGODBI_URI)
 
         const deleteRoutes = require('./routes/delete')(db);
         app.use('/delete', deleteRoutes);
+
+        const completeRoutes = require('./routes/complete')(db);
+        app.use('/complete', completeRoutes);
     })
     .catch(err => {
         console.error('Error conectando a MongoDB:', err);

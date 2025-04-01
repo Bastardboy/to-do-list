@@ -30,7 +30,7 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen p-8 bg-gradient-to-br from-slate-100 to-indigo-50 dark:from-slate-900 dark:to-indigo-900/20">
+    <div className="min-h-screen p-8 bg-gradient-to-br from-slate-100 to-indigo-50">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-6xl font-bold text-center mb-12 bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
           📌 Organizador de Tareas
@@ -41,7 +41,7 @@ const App = () => {
         {tasks.length > 0 ? (
           <TaskList tasks={tasks} fetchDelete={fetchDelete} fetchTasks={fetchTasks} />
         ) : (
-          <div className="text-center py-12 text-slate-500 dark:text-slate-400">
+          <div className="text-center py-12 text-slate-700">
             <p className="text-xl">🎉 ¡No hay tareas! Crea tu primera tarea</p>
           </div>
         )}

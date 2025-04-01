@@ -13,8 +13,24 @@ module.exports = (db) => {
             title,
             description,
             completed: false,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            createdAt: new Date().toLocaleString('es-CL', { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit', 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit', 
+                timeZone: 'America/Santiago' 
+            }),
+            updatedAt: new Date().toLocaleString('es-CL', { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit', 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit', 
+                timeZone: 'America/Santiago' 
+            }),
         };
 
         console.log('Task to be inserted:', task);
@@ -38,7 +54,18 @@ module.exports = (db) => {
 
             const tasks = await db.collection('homeworks-list').find({ id_user }).toArray();
 
-            res.json(tasks);
+            const taskWithCovertedDate = tasks.map(task => {
+                const localDate = new Date(task.createdAt);
+                const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit',timeZone:'America/Santiago'};
+                const formattedDate = localDate.toLocaleDateString('es-CL', options);
+
+                return {
+                    ...task,
+                    createdAt: formattedDate,
+                };
+            });
+        
+            res.json(taskWithCovertedDate);
         } catch (err) {
             console.error('Error fetching tasks:', err);
             res.status(500).json({ error: 'Error obteniendo las tareas' });

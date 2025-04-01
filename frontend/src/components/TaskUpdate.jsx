@@ -6,6 +6,11 @@ const TaskUpdate = ({ _id, title, description, fetchTasks, onClose }) => {
   const [newDescription, setNewDescription] = useState(description);
 
   const handleUpdate = async () => {
+    if (!newTitle.trim() || !newDescription.trim()) {
+      alert('Por favor, completa todos los campos antes de guardar.');
+      return;
+    }
+
     try {
       const response = await axios.patch(
         '/api/update',
@@ -39,14 +44,16 @@ const TaskUpdate = ({ _id, title, description, fetchTasks, onClose }) => {
           className="w-full p-2 bg-white/10 border-2 border-cyan-300/50 rounded-lg text-white text-xl font-bold focus:outline-none focus:border-cyan-400 placeholder-white/50"
           placeholder="Título de la tarea"
           autoFocus
+          required
         />
         
-        <textarea
+        <input
           value={newDescription}
           onChange={(e) => setNewDescription(e.target.value)}
           className="w-full p-2 bg-white/10 border-2 border-cyan-300/50 rounded-lg text-cyan-100 focus:outline-none focus:border-cyan-400 resize-none placeholder-white/50"
           placeholder="Descripción de la tarea"
           rows="3"
+          required
         />
       </div>
 

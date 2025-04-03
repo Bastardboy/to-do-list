@@ -4,14 +4,14 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const { v4: uuidv4 } = require('uuid');
-const update = require('./routes/update');
+
 
 dotenv.config();
 
 const app = express();
 app.use(cors({
     origin: 'http://localhost:5173',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Cookie'],
     credentials: true
 }));

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TaskDelete from './TaskDelete';
 import TaskComplete from './TaskComplete';
 import TaskUpdate from './TaskUpdate';
-import DeadlineSelector from './DeadLine'; // Importa el componente de deadline
+import DeadlineSelector from './DeadLineSelector';
 
 const TaskList = ({ tasks, fetchDelete, fetchTasks, updateTaskDeadline }) => {
   const [mountedTasks, setMountedTasks] = useState(new Set());
@@ -30,14 +30,6 @@ const TaskList = ({ tasks, fetchDelete, fetchTasks, updateTaskDeadline }) => {
     });
   };
 
-  const toggleCalendarVisibility = (taskId) => {
-    setCalendarVisible((prevState) => ({
-      ...prevState,
-      [taskId]: !prevState[taskId],  // Alterna la visibilidad del calendario de esta tarea
-    }));
-  };
-
-  // Estilo común para los botones
   const buttonStyle = "px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-300";
 
   return (
@@ -65,13 +57,10 @@ const TaskList = ({ tasks, fetchDelete, fetchTasks, updateTaskDeadline }) => {
             />
           ) : (
             <>
-              {/* Capas de fondo no interactivas */}
               <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 hover:opacity-20 transition-opacity duration-300 rounded-2xl pointer-events-none" />
               <div className="absolute inset-0 border-2 border-white/10 rounded-2xl group-hover:border-white/30 transition-all duration-500 pointer-events-none" />
 
-              {/* Contenido principal */}
               <div className="flex flex-col h-full">
-                {/* Encabezado con botones */}
                 <div className="flex justify-between items-center relative z-20 mb-4">
                   <h5 className="text-2xl font-semibold" style={{ fontFamily: 'Arial, sans-serif' }}>
                     <span className="text-white">
@@ -93,22 +82,21 @@ const TaskList = ({ tasks, fetchDelete, fetchTasks, updateTaskDeadline }) => {
                   </div>
                 </div>
 
-                {/* Descripción */}
                 <p className="mb-6 text-cyan-100/90 relative z-20 flex-grow">
                   {task.description}
                 </p>
 
-                {/* Botón Eliminar y Establecer Plazo */}
+                {task.deadline && (
+                  <p className="text-sm text-cyan-200 mb-4">
+                    Fecha límite: {new Date(task.deadline).toLocaleDateString()}
+                  </p>
+                )}
+
                 <div className="task-buttons-container flex justify-end relative z-20 mt-4">
                   <DeadlineSelector
-                    onDeadlineSet={(date) => {
-                      console.log('Fecha seleccionada para:', task._id, date);
-                      // Actualiza la fecha límite de la tarea
-                      updateTaskDeadline(task._id, date);
-                    }}
                     triggerButton={
                       <button
-                        className={`deadline-button bg-gradient-to-r from-blue-400 to-blue-500 text-white ${buttonStyle}`}  // Estilo unificado
+                        className="deadline-button bg-gradient-to-r from-blue-400 to-blue-500 text-white px-3 py-2 rounded-lg flex items-center gap-2 hover:scale-105 transition-all"
                         onClick={() => setOpenDeadlineID(openDeadlineID === task._id ? null : task._id)}
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -119,12 +107,18 @@ const TaskList = ({ tasks, fetchDelete, fetchTasks, updateTaskDeadline }) => {
                     }
                     isOpen={openDeadlineID === task._id}
                     onClose={() => setOpenDeadlineID(null)}
+                    taskId={task._id}
+                    onDeadlineSet={(date) => {
+                      if (typeof updateTaskDeadline === 'function') {
+                        updateTaskDeadline(task._id, date);
+                      }
+                    }}
                   />
                   <TaskDelete
                     _id={task._id}
                     fetchDelete={() => handleRemoveAnimation(task._id)}
                     fetchTasks={fetchTasks}
-                    className={`delete-button bg-gradient-to-r from-red-400 to-red-500 text-white ${buttonStyle}`}  // Estilo unificado
+                    className="delete-button bg-gradient-to-r from-red-400 to-red-500 text-white px-3 py-2 rounded-lg hover:scale-105 transition-all"
                   />
                 </div>
               </div>

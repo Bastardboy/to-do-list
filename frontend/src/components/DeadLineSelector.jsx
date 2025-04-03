@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Calendar from 'react-calendar';
+import axios from 'axios'; // Importar Axios
 
 const DeadlineSelector = ({ taskId, onDeadlineSet, triggerButton, isOpen, onClose }) => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -9,21 +10,18 @@ const DeadlineSelector = ({ taskId, onDeadlineSet, triggerButton, isOpen, onClos
 
   useEffect(() => {
     if (isOpen && taskId) {
-      fetch(`api/deadline/${taskId}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.deadline) {
-            const deadlineDate = new Date(data.deadline);
+      axios.get(`/api/date/${taskId}`)
+        .then(response => {
+          const { deadline } = response.data;
+          if (deadline) {
+            const deadlineDate = new Date(deadline);
             setSelectedDate(deadlineDate);
             calculateDaysLeft(deadlineDate);
           }
         })
         .catch(error => {
-          console.error('Error obteniendo la fecha límite:', error);
-          setError('Error al obtener la fecha límite');
+          console.error('Error obteniendo fecha:', error);
+          setError('Aún no hay fecha límite');
         });
     }
   }, [isOpen, taskId]);
@@ -33,22 +31,20 @@ const DeadlineSelector = ({ taskId, onDeadlineSet, triggerButton, isOpen, onClos
     calculateDaysLeft(date);
 
     try {
-      const response = await fetch(`api/deadline/${taskId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ deadline: date.toISOString() }),
+      const response = await axios.patch(`/api/deadline/${taskId}`, {
+        deadline: date.toISOString(),
       });
 
-      if (!response.ok) throw new Error('Error al actualizar la fecha límite');
+      console.log('Respuesta servidor:', response.data);
 
-      const data = await response.json();
-      console.log('Respuesta del servidor:', data);
+      if (typeof onDeadlineSet === 'function') {
+        onDeadlineSet(date); // Aquí se pasa el cambio al componente principal
+      }
 
-      onDeadlineSet(date);
       onClose();
     } catch (error) {
-      console.error('Error al actualizar la fecha límite:', error);
-      setError('Error al actualizar la fecha límite');
+      console.error('Error actualizando fecha:', error);
+      setError(error.response?.data?.message || 'Error al guardar fecha');
     }
   };
 
@@ -97,7 +93,7 @@ const DeadlineSelector = ({ taskId, onDeadlineSet, triggerButton, isOpen, onClos
               </div>
             )}
 
-            {error && <div className="text-red-500">{error}</div>}
+            {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
           </div>
         </div>
       )}

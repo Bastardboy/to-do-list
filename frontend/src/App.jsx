@@ -29,6 +29,15 @@ const App = () => {
     }
   };
 
+  const updateTaskDeadline = async (taskId, date) => {
+    try {
+      await axios.patch(`/api/deadline/${taskId}`, { deadline: date });
+      fetchTasks(); // Actualiza la lista de tareas después de cambiar la fecha
+    } catch (error) {
+      console.error('Error actualizando la fecha:', error);
+    }
+  };
+
   return (
     <div className="min-h-screen p-8 bg-gradient-to-br from-slate-100 to-indigo-50">
       <div className="max-w-7xl mx-auto">
@@ -39,7 +48,8 @@ const App = () => {
         <TaskForm fetchTasks={fetchTasks} />
         
         {tasks.length > 0 ? (
-          <TaskList tasks={tasks} fetchDelete={fetchDelete} fetchTasks={fetchTasks} />
+          <TaskList tasks={tasks} fetchDelete={fetchDelete} fetchTasks={fetchTasks} updateTaskDeadline={updateTaskDeadline}
+          />
         ) : (
           <div className="text-center py-12 text-slate-700">
             <p className="text-xl">🎉 ¡No hay tareas! Crea tu primera tarea</p>

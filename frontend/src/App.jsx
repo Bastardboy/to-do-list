@@ -3,7 +3,6 @@ import axios from 'axios';
 import TaskList from './components/TaskList';
 import TaskForm from './components/TaskForm';
 
-
 const App = () => {
   const [tasks, setTasks] = useState([]);
 
@@ -20,9 +19,9 @@ const App = () => {
     }
   };
 
-  const fetchDelete = async () => {
+  const fetchDelete = async (taskId) => {
     try {
-      await axios.delete('/api/delete');
+      await axios.delete(`/api/delete/${taskId}`);
       fetchTasks();
     } catch (error) {
       console.error('Error fetching delete:', error);
@@ -39,16 +38,20 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen p-8 bg-gradient-to-br from-slate-100 to-indigo-50">
+    <div className="min-h-screen bg-gradient-animated bg-noisy">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-6xl font-bold text-center mb-12 bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
           📌 Organizador de Tareas
         </h1>
-          
+
         <TaskForm fetchTasks={fetchTasks} />
-        
+
         {tasks.length > 0 ? (
-          <TaskList tasks={tasks} fetchDelete={fetchDelete} fetchTasks={fetchTasks} updateTaskDeadline={updateTaskDeadline}
+          <TaskList
+            tasks={tasks}
+            fetchDelete={fetchDelete}
+            fetchTasks={fetchTasks}
+            updateTaskDeadline={updateTaskDeadline}
           />
         ) : (
           <div className="text-center py-12 text-slate-700">

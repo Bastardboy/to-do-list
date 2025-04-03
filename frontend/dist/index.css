@@ -160,3 +160,77 @@
 .react-calendar__tile.other-month:hover {
   background-color: #357ABD; /* Un color al pasar el mouse */
 }
+
+/* Agrega esto en tu archivo CSS global */
+body {
+  background: radial-gradient(
+    circle at 10% 20%,
+    rgba(248, 219, 219, 0.9) 0%,
+    rgba(229, 248, 250, 0.9) 90%
+  );
+  min-height: 100vh;
+}
+
+@keyframes gradient-x {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.bg-gradient-animated {
+  background: linear-gradient(45deg, #6e7fdb, #ac79ff, #ff70a6, #f47cd6);
+  background-size: 400% 400%;
+  animation: gradient-x 15s ease infinite;
+}
+
+
+.bg-gradient-noise {
+  background: linear-gradient(45deg, #ff70a6, #6e7fdb, #b29bff, #f0c0e9);
+  background-size: 400% 400%;
+  animation: gradient-x 30s ease infinite, noise 1s linear infinite;
+  background-image: url('https://grainy-gradients.vercel.app/noise.svg'), linear-gradient(45deg, #ff70a6, #6e7fdb, #b29bff, #f0c0e9);
+}
+
+.scrollbar-custom::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* En el archivo global de TailwindCSS o en un archivo de estilos adicional */
+
+.card {
+  display: grid;
+  grid-template-rows: 1fr auto auto; /* Asegura que las tarjetas tengan una estructura consistente */
+  min-height: 350px; /* Ajusta esta altura según lo que desees */
+}
+
+.card-content {
+  padding: 1.5rem; /* Espaciado interno de la tarjeta */
+  overflow: hidden; /* Evita que el contenido exceda la tarjeta */
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto; /* Empuja el pie de página hacia abajo */
+}

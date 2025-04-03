@@ -6,6 +6,7 @@ const DeadlineSelector = ({ taskId, onDeadlineSet, triggerButton, isOpen, onClos
   const [selectedDate, setSelectedDate] = useState(null);
   const [daysLeft, setDaysLeft] = useState(null);
   const [error, setError] = useState(null);
+  const [deadlineColor, setDeadlineColor] = useState(''); // Estado para el color de la fecha
   const popoverRef = useRef();
 
   useEffect(() => {
@@ -52,7 +53,17 @@ const DeadlineSelector = ({ taskId, onDeadlineSet, triggerButton, isOpen, onClos
     if (!deadlineDate) return;
     const today = new Date();
     const timeDiff = deadlineDate.setHours(0, 0, 0, 0) - today.setHours(0, 0, 0, 0);
-    setDaysLeft(Math.ceil(timeDiff / (1000 * 3600 * 24)));
+    const days = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    setDaysLeft(days);
+
+    // Cambiar el color según los días restantes
+    if (days > 10) {
+      setDeadlineColor('text-green-500');
+    } else if (days > 5) {
+      setDeadlineColor('text-yellow-500');
+    } else if (days >= 0) {
+      setDeadlineColor('text-red-500');
+    }
   };
 
   return (
@@ -68,32 +79,10 @@ const DeadlineSelector = ({ taskId, onDeadlineSet, triggerButton, isOpen, onClos
               onChange={handleDateChange}
               value={selectedDate}
               minDate={new Date()}
-              className="[&_button]:text-white [&_abbr]:text-cyan-200 [&_.react-calendar__navigation__label]:text-white [&_.react-calendar__tile]:rounded-lg [&_.react-calendar__tile--active]:bg-blue-500 [&_.react-calendar__tile--now]:bg-blue-500/20 [&_.react-calendar__tile]:transition-colors"
-              prevLabel={<span className="text-white hover:text-blue-300">◄</span>}
-              nextLabel={<span className="text-white hover:text-blue-300">►</span>}
-              prev2Label={null}
-              next2Label={null}
-              formatShortWeekday={(locale, date) => ['D', 'L', 'M', 'M', 'J', 'V', 'S'][date.getDay()]}
-              tileDisabled={({ date }) => date.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)}
-              tileClassName={({ date }) => date.getDay() === 0 ? '!text-red-300' : ''}
+              className="[&_button]:text-white [&_abbr]:text-cyan-200 [&_.react-calendar__navigation__label]:text-white [&_.react-calendar__tile]:rounded-lg [&_.react-calendar__tile--active]:bg-blue-500 [&_.react-calendar__tile--now]:bg-blue-500/20 [&_.react-calendar__tile]:transition-colors duration-300"
             />
 
-            <div className="mt-3 flex justify-between items-center">
-              <button onClick={onClose} className="px-3 py-1.5 text-sm bg-red-500/20 text-red-100 rounded-lg hover:bg-red-500/30">
-                Cancelar
-              </button>
-              <span className="text-sm text-cyan-200">
-                {selectedDate ? selectedDate.toLocaleDateString('es-CL') : 'Sin fecha'}
-              </span>
-            </div>
-
-            {daysLeft !== null && (
-              <div className="mt-2 text-sm text-white">
-                {daysLeft > 0 ? `${daysLeft} días restantes` : '¡La fecha ya pasó!'}
-              </div>
-            )}
-
-            {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+            {error && <p className="text-red-400">{error}</p>}
           </div>
         </div>
       )}

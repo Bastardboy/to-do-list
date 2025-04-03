@@ -13,6 +13,9 @@ const TaskDelete = ({ _id, fetchTasks }) => {
         withCredentials: true
       });
 
+      localStorage.removeItem(`task-${_id}-completed`); // Eliminar el estado localmente
+      
+
       fetchTasks();
     } catch (error) {
       console.error('Error deleting task:', error);

@@ -4,70 +4,48 @@ import axios from 'axios';
 const TaskComplete = ({ _id, fetchTasks }) => {
   const [isCompleted, setIsCompleted] = useState(false);
 
-  // Cargar el estado inicial desde localStorage
+  // Cargar el estado inicial desde la base de datos
   useEffect(() => {
-    const storedStatus = localStorage.getItem(`task-${_id}-completed`);
-    if (storedStatus !== null) {
-      setIsCompleted(JSON.parse(storedStatus)); // Recuperamos el estado almacenado
-    } else {
-      // Si no está en localStorage, consultamos la base de datos
-      const fetchTaskStatus = async () => {
-        try {
-          const response = await axios.get(`/api/task/${_id}`);
-          if (response.status === 200) {
-            setIsCompleted(response.data.completed);
-          }
-        } catch (error) {
-          console.error('Error fetching task status:', error);
+    const fetchTaskStatus = async () => {
+      try {
+        const response = await axios.get(`/api/tasks/${_id}`);
+        if (response.status === 200) {
+          setIsCompleted(response.data.completed);
         }
-      };
+      } catch (error) {
+        console.error('Error fetching task status:', error);
+      }
+    };
 
-      fetchTaskStatus();
-    }
-  }, [_id]); // Solo se ejecuta cuando el _id cambia
+    fetchTaskStatus();
+  }, [_id]);
 
   const handleComplete = async () => {
     try {
-      // Marca la tarea como completada
-      const response = await axios.patch('/api/complete', {
+      // Actualización optimista: se cambia el estado local inmediatamente
+      setIsCompleted(true);
+      const response = await axios.patch(`/api/tasks/complete/${_id}`, {
         taskId: _id,
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true, // Si usas autenticación por cookies
+        completed: true,
       });
-
       if (response.status === 200) {
-        // Almacenar el estado localmente para persistencia
-        localStorage.setItem(`task-${_id}-completed`, JSON.stringify(true));
-        setIsCompleted(true); // Actualizamos el estado local
-
-        fetchTasks(); // Vuelve a obtener la lista de tareas actualizada
+        fetchTasks(); // Actualiza la lista de tareas
       }
     } catch (error) {
       console.error('Error completing task:', error);
+      setIsCompleted(false); // Revertir el cambio en caso de error
     }
   };
 
   const handleUndoComplete = async () => {
     try {
-      // Marca la tarea como incompleta
-      const response = await axios.patch('/api/complete', {
+      const response = await axios.patch(`/api/tasks/complete/${_id}`, {
         taskId: _id,
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
+        completed: false,
       });
-
       if (response.status === 200) {
-        // Almacenar el estado localmente para persistencia
-        localStorage.setItem(`task-${_id}-completed`, JSON.stringify(false));
-        setIsCompleted(false); // Actualizamos el estado local
-
-        fetchTasks(); // Vuelve a obtener la lista de tareas actualizada
+        setIsCompleted(false);
+        fetchTasks();
       }
     } catch (error) {
       console.error('Error undoing task completion:', error);

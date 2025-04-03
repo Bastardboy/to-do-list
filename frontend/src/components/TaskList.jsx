@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TaskDelete from './TaskDelete';
 import TaskComplete from './TaskComplete';
 import TaskUpdate from './TaskUpdate';
 import DeadlineSelector from './DeadLine'; // Importa el componente de deadline
 
-const TaskList = ({ tasks, fetchDelete, fetchTasks }) => {
+const TaskList = ({ tasks, fetchDelete, fetchTasks, updateTaskDeadline }) => {
   const [mountedTasks, setMountedTasks] = useState(new Set());
   const [editingId, setEditingId] = useState(null);
   const [openDeadlineID, setOpenDeadlineID] = useState(null);
@@ -102,7 +102,9 @@ const TaskList = ({ tasks, fetchDelete, fetchTasks }) => {
                 <div className="task-buttons-container flex justify-end relative z-20 mt-4">
                   <DeadlineSelector
                     onDeadlineSet={(date) => {
-                      console.log('Fecha seleccionada para:', task._id,date);
+                      console.log('Fecha seleccionada para:', task._id, date);
+                      // Actualiza la fecha límite de la tarea
+                      updateTaskDeadline(task._id, date);
                     }}
                     triggerButton={
                       <button

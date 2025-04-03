@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const { v4: uuidv4 } = require('uuid');
+const update = require('./routes/update');
 
 dotenv.config();
 
@@ -59,8 +60,11 @@ MongoClient.connect(MONGODBI_URI)
         const deleteRoutes = require('./routes/delete')(db);
         app.use('/delete', deleteRoutes);
 
-        const completeRoutes = require('./routes/complete')(db);
-        app.use('/complete', completeRoutes);
+        const getDateRoutes = require('./routes/date')(db);
+        app.use('/date', getDateRoutes);
+
+        const updateDeadlines = require('./routes/deadline')(db);
+        app.use('/deadline', updateDeadlines)
     })
     .catch(err => {
         console.error('Error conectando a MongoDB:', err);

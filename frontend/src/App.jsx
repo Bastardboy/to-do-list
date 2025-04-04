@@ -40,7 +40,7 @@ const App = () => {
   const fetchTaskOrder = async (sortConfig = { sortBy: 'createdAt', order: 'desc' }) => {
     try {
       const response = await axios.get('/api/tasks/ordenar', {
-        params: sortConfig, // Pasar los parámetros de ordenamiento
+        params: sortConfig, 
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true
       });
@@ -52,28 +52,28 @@ const App = () => {
   
   return (
     <div className="min-h-screen bg-gradient-animated bg-noisy">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-6xl font-bold text-center mb-12 bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
-          📌 Organizador de Tareas
-        </h1>
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-center mb-12 bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
+      📌 Organizador de Tareas
+    </h1>
 
-        <TaskForm fetchTasks={fetchTasks} />
+    <TaskForm fetchTasks={fetchTasks} />
 
-        {tasks.length > 0 ? (
-          <TaskList
-            tasks={tasks}
-            fetchDelete={fetchDelete}
-            fetchTasks={fetchTasks}
-            updateTaskDeadline={updateTaskDeadline}
-            fetchTaskOrder={fetchTaskOrder}
-          />
-        ) : (
-          <div className="text-center py-12 text-slate-700">
-            <p className="text-xl">🎉 ¡No hay tareas! Crea tu primera tarea</p>
-          </div>
-        )}
+    {tasks.length > 0 ? (
+      <TaskList
+        tasks={tasks}
+        fetchDelete={fetchDelete}
+        fetchTasks={fetchTasks}
+        updateTaskDeadline={updateTaskDeadline}
+        fetchTaskOrder={fetchTaskOrder}
+      />
+    ) : (
+      <div className="text-center py-12 text-slate-700">
+        <p className="text-xl">🎉 ¡No hay tareas! Crea tu primera tarea</p>
       </div>
-    </div>
+    )}
+  </div>
+</div>
   );
 };
 

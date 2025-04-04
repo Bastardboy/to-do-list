@@ -37,6 +37,19 @@ const App = () => {
     }
   };
 
+  const fetchTaskOrder = async (sortConfig = { sortBy: 'createdAt', order: 'desc' }) => {
+    try {
+      const response = await axios.get('/api/tasks/ordenar', {
+        params: sortConfig, // Pasar los parámetros de ordenamiento
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true
+      });
+      setTasks(response.data);
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    }
+  };
+  
   return (
     <div className="min-h-screen bg-gradient-animated bg-noisy">
       <div className="max-w-7xl mx-auto">
@@ -52,6 +65,7 @@ const App = () => {
             fetchDelete={fetchDelete}
             fetchTasks={fetchTasks}
             updateTaskDeadline={updateTaskDeadline}
+            fetchTaskOrder={fetchTaskOrder}
           />
         ) : (
           <div className="text-center py-12 text-slate-700">

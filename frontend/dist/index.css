@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
 @import "tailwindcss";
 
 @keyframes card-in {
@@ -11,6 +12,39 @@
     }
   }
   
+  /* Añade esto para forzar la fuente Inter en todo el documento */
+  @layer base {
+    html {
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+  }
+  @layer components {
+    .text-inter-accent {
+      color: white;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+    
+    .inter-highlight {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .inter-highlight::after {
+      content: '';
+      position: absolute;
+      z-index: -10;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 0.25rem; /* Equivalent to h-1 */
+      background-color: rgba(6, 182, 212, 0.2); /* Equivalent to bg-cyan-400/20 */
+      transform: scaleX(0.95);
+      transform-origin: left;
+    }
+  }
+
   @keyframes card-shine {
     0% {
       background-position: -200% 0;
@@ -254,8 +288,4 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-top: auto; /* Empuja el pie de página hacia abajo */
-}
-
-.theme {
-  --font-inter: 'Inter', 'sans-serif';
 }

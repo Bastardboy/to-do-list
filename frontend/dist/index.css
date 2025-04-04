@@ -33,20 +33,41 @@
     animation: card-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   
-  .task-card:hover {
-    &::after {
-      animation: card-shine 1.5s linear infinite;
-    }
+  .task-card {
+    border-radius: 0.75rem; /* Bordes redondeados */
+    padding: 1.5rem; /* Espaciado interior */
+    background: #fff; /* Fondo blanco */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease; /* Animación de la sombra */
   }
+  
+  .task-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más intensa al pasar el ratón */
+    transform: translateY(-5px); /* Efecto de elevación */
+  }
+  
 
 
-.edit-mode {
-    min-height: 250px; /* Misma altura que las tarjetas normales */
+  .edit-mode {
+    min-height: 250px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
   }
-
+  
+  .edit-mode input,
+  .edit-mode textarea {
+    transition: all 0.3s ease;
+  }
+  
+  .edit-mode input:focus,
+  .edit-mode textarea:focus {
+    box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.3);
+  }
+  
+  .edit-mode button {
+    font-weight: 500;
+  }
 /* Estilo global para el calendario */
 .react-calendar-custom {
   background-color: #2a2f36; /* Fondo oscuro */
@@ -233,4 +254,8 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-top: auto; /* Empuja el pie de página hacia abajo */
+}
+
+.theme {
+  --font-inter: 'Inter', 'sans-serif';
 }

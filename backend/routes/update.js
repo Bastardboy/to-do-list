@@ -54,7 +54,7 @@ module.exports = (db) => {
     const updates = { 
       title,
       description,
-      updatedAt: formatDate() // Usamos la función reutilizable
+      updatedAt: new Date() // Usamos la función reutilizable
     };
 
     try {

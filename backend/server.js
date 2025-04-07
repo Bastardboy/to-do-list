@@ -4,8 +4,8 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const { v4: uuidv4 } = require('uuid');
-const morgan = require('morgan'); // Agregado para logging de requests HTTP
-const helmet = require('helmet'); // Agregado para seguridad básica
+const morgan = require('morgan');
+const helmet = require('helmet');
 
 // Configuración de entorno
 dotenv.config();
@@ -15,7 +15,8 @@ const {
   PORT = 5000,
   MONGODBI_URI,
   NODE_ENV = 'development',
-  CLIENT_ORIGIN = 'http://localhost:5173'
+  CLIENT_ORIGIN = 'https://752f-2800-150-156-537-f72-bf98-a626-83c8.ngrok-free.app/'
+  //CLIENT_ORIGIN = 'http://localhost:5173'
 } = process.env;
 
 // Inicialización de la aplicación
@@ -25,6 +26,11 @@ const app = express();
 app.use(helmet());
 app.use(morgan(NODE_ENV === 'development' ? 'dev' : 'combined'));
 app.use(express.json());
+app.use(express.static('public'));
+app.use((req, res, next) => {
+  res.setHeader('Service-Worker-Allowed', '/');
+  next();
+});
 app.use(cookieParser());
 app.use(cors({
   origin: CLIENT_ORIGIN,
@@ -108,7 +114,6 @@ const connectToDatabase = async () => {
       console.debug(`[ROUTE] Ruta configurada: ${path}`);
     });
 
-
     // Middleware para manejo de errores 404
     app.use((req, res) => {
       console.warn(`[404] Ruta no encontrada: ${req.method} ${req.originalUrl}`);
@@ -139,7 +144,7 @@ const connectToDatabase = async () => {
 const startServer = async () => {
   try {
     await connectToDatabase();
-    const server = app.listen(PORT, () => {
+    const server = app.listen(PORT, '0.0.0.0', () => {
       console.info(`[SERVER] Servidor corriendo en http://localhost:${PORT} (${NODE_ENV})`);
     });
 

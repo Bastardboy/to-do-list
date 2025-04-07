@@ -16,9 +16,9 @@ module.exports = (db) => {
    * @param {string} taskId - ID de la tarea a eliminar (en el body)
    * @returns {object} Mensaje de éxito o error
    */
-  router.delete('/', async (req, res) => {
+  router.delete('/:taskId', async (req, res) => {
     const id_user = req.id_user;
-    const { taskId } = req.body;
+    const { taskId } = req.params;
 
     // Debug: Log de la solicitud entrante
     console.debug('[DELETE /] Solicitud recibida:', {

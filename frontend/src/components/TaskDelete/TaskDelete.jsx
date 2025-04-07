@@ -14,14 +14,13 @@ const TaskDelete = ({ _id, fetchDelete, fetchTasks, className, index }) => {
 
   const handleConfirmDelete = async () => {
     try {
-      await axios.delete('/api/delete', {
-        data: { taskId: _id },
+      await axios.delete(`/api/delete/${_id}`, {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true
       });
 
       localStorage.removeItem(`task-${_id}-completed`);
-      fetchDelete(_id);
+      
       fetchTasks();
     } catch (error) {
       console.error('Error deleting task:', error);

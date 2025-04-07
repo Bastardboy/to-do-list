@@ -21,7 +21,12 @@ const App = () => {
 
   const fetchDelete = async (taskId) => {
     try {
-      await axios.delete(`/api/delete/${taskId}`);
+      await axios.delete(`api/delete/${taskId}`,
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true
+        }
+      );
       fetchTasks();
     } catch (error) {
       console.error('Error fetching delete:', error);

@@ -7,7 +7,12 @@ const TaskList = ({
   fetchDelete, 
   fetchTasks, 
   updateTaskDeadline,
-  fetchTaskOrder 
+  fetchTaskOrder,
+  notifyEnabled,
+  onToggleNotifications,
+  notificationLoading,
+  notificationError,
+  cookieId
 }) => {
   const [expandedTasks, setExpandedTasks] = useState({});
   const [openDeadlineID, setOpenDeadlineID] = useState(null);
@@ -24,17 +29,16 @@ const TaskList = ({
     }));
   };
 
-// Corrige el nombre de la variable en handleRemoveAnimation
   const handleRemoveAnimation = (taskId) => {
     const card = document.getElementById(`task-${taskId}`);
     if (card) {
-      card.style.animation = 'none'; // Resetear animaciones previas
-      void card.offsetHeight; // Forzar reflow
+      card.style.animation = 'none';
+      void card.offsetHeight;
       card.classList.add('animate-card-out');
       setTimeout(() => {
         fetchDelete(taskId);
         fetchTaskOrder(sortConfig);
-      }, 600); // Aumentar ligeramente el timeout
+      }, 600);
     }
   };
   
@@ -59,7 +63,12 @@ const TaskList = ({
     <div className="container mx-auto">
       <TaskOrder 
         sortConfig={sortConfig}
-        onSortChange={handleSortChange} 
+        onSortChange={handleSortChange}
+        notifyEnabled={notifyEnabled}
+        onToggleNotifications={onToggleNotifications}
+        notificationLoading={notificationLoading}
+        notificationError={notificationError}
+        cookieId={cookieId}
       />
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 items-start">

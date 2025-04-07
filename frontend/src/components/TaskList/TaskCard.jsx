@@ -5,7 +5,6 @@ import TaskDeadlineInfo from './TaskDeadlineInfo';
 import TaskButtons from './TaskButtons';
 import TaskUpdate from '../TaskUpdate/TaskUpdate';
 
-
 const cardGradients = [
   'from-indigo-600 to-blue-700',
   'from-purple-600 to-indigo-700',
@@ -30,13 +29,13 @@ const TaskCard = ({
   const gradientClass = cardGradients[index % cardGradients.length];
 
   return (
-    <div
-      id={`task-${task._id}`}
-      className={`relative p-6 bg-gradient-to-br ${gradientClass} text-white rounded-2xl shadow-2xl flex flex-col
-               transform transition-all duration-500 hover:scale-[1.03] hover:shadow-3xl
-               animate-card-in`}
-      style={{ animationDelay: `${index * 0.1}s` }}
-    >
+      <div
+        id={`task-${task._id}`}
+        className={`relative p-6 bg-gradient-to-br ${gradientClass} text-white rounded-2xl shadow-2xl flex flex-col
+                transform transition-all duration-500 hover:scale-[1.03] hover:shadow-3xl
+                animate-card-in preserve-3d`} // Agregar preserve-3d aquí
+        style={{ animationDelay: `${index * 0.1}s` }}
+      >
       <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 hover:opacity-20 transition-opacity duration-300 rounded-2xl pointer-events-none" />
       <div className="absolute inset-0 border-2 border-white/10 rounded-2xl group-hover:border-white/30 transition-all duration-500 pointer-events-none" />
 
@@ -73,8 +72,6 @@ const TaskCard = ({
               onToggleDeadline={onToggleDeadline}
               updateTaskDeadline={updateTaskDeadline}
             />
-
-
           </>
         )}
       </div>

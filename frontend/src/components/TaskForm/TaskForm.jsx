@@ -83,6 +83,7 @@ const TaskForm = ({ fetchTasks }) => {
               setTitle(e.target.value);
               setError('');
             }}
+            maxLength={30}
             className={`font-alert w-full p-4 rounded-xl bg-white/20 backdrop-blur-sm border ${
               error && !title.trim() ? 'border-red-400' : 'border-white/30'
             } text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 shadow-lg transition-all duration-300`}

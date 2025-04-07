@@ -26,7 +26,7 @@ module.exports = (db) => {
    * @returns {object} Mensaje de éxito o error
    */
   router.patch('/', async (req, res) => {
-    const id_user = req.id_user;
+    const id_user = req.user.cookieId;
     const { taskId, title, description } = req.body;
 
     // Debug: Log de la solicitud entrante

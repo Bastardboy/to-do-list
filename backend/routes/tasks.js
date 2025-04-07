@@ -35,7 +35,7 @@ module.exports = (db) => {
   // Crear una nueva tarea
   router.post('/', async (req, res) => {
     const { title, description } = req.body;
-    const id_user = req.id_user;
+    const id_user = req.user.cookieId;
     
     console.debug('[DEBUG] Creando nueva tarea:', {
       id_user,
@@ -94,7 +94,7 @@ module.exports = (db) => {
 
   // Obtener tareas con opción de ordenamiento
   const getTasksHandler = async (req, res) => {
-    const id_user = req.id_user;
+    const id_user = req.user.cookieId;
     const { sortBy = 'createdAt', order = 'desc' } = req.query;
     
     console.debug('[DEBUG] Obteniendo tareas con parámetros:', {
@@ -175,7 +175,7 @@ module.exports = (db) => {
   // Obtener una tarea por ID
   router.get('/:taskId', validateObjectId, async (req, res) => {
     const { taskId } = req.params;
-    const id_user = req.id_user;
+    const id_user = req.user.cookieId;
     
     console.debug('[DEBUG] Buscando tarea por ID:', { taskId, id_user });
 
@@ -216,7 +216,7 @@ module.exports = (db) => {
   router.patch('/complete/:taskId', validateObjectId, async (req, res) => {
     const { taskId } = req.params;
     const { completed } = req.body;
-    const id_user = req.id_user;
+    const id_user = req.user.cookieId;
     
     console.debug('[DEBUG] Actualizando estado de tarea:', {
       taskId,

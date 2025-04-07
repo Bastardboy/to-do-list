@@ -17,7 +17,7 @@ module.exports = (db) => {
    * @returns {object} Mensaje de éxito o error
    */
   router.delete('/:taskId', async (req, res) => {
-    const id_user = req.id_user;
+    const id_user = req.user.cookieId;
     const { taskId } = req.params;
 
     // Debug: Log de la solicitud entrante

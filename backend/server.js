@@ -33,32 +33,6 @@ app.use(cors({
   credentials: true
 }));
 
-// Middleware de manejo de usuario
-app.use((req, res, next) => {
-  let id_user = req.cookies.id_user;
-
-  if (!id_user) {
-    id_user = uuidv4();
-    const cookieOptions = {
-      maxAge: 365 * 24 * 60 * 60 * 1000, // 1 año en milisegundos
-      httpOnly: true,
-      secure: NODE_ENV === 'production',
-      sameSite: NODE_ENV === 'production' ? 'strict' : 'lax',
-      path: '/'
-    };
-
-    if (NODE_ENV === 'production') {
-      cookieOptions.domain = process.env.COOKIE_DOMAIN;
-    }
-
-    res.cookie('id_user', id_user, cookieOptions);
-    console.debug(`[AUTH] Nueva cookie de usuario generada: ${id_user}`);
-  }
-
-  req.id_user = id_user;
-  next();
-});
-
 // Conexión a MongoDB y configuración de rutas
 const connectToDatabase = async () => {
   try {
@@ -73,19 +47,67 @@ const connectToDatabase = async () => {
     console.info('[DB] Conectado a MongoDB');
     const db = client.db('to-do-list');
 
+    // Middleware de manejo de usuario con colección 'users'
+    app.use(async (req, res, next) => {
+      try {
+        let cookieId = req.cookies.id_user;
+
+        if (!cookieId) {
+          cookieId = uuidv4();
+          const cookieOptions = {
+            maxAge: 365 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+            secure: NODE_ENV === 'production',
+            sameSite: NODE_ENV === 'production' ? 'strict' : 'lax',
+            path: '/'
+          };
+
+          if (NODE_ENV === 'production') {
+            cookieOptions.domain = process.env.COOKIE_DOMAIN;
+          }
+
+          res.cookie('id_user', cookieId, cookieOptions);
+          console.debug(`[AUTH] Cookie generada: ${cookieId}`);
+        }
+
+        const usersCollection = db.collection('users');
+        let user = await usersCollection.findOne({ cookieId });
+
+        if (!user) {
+          user = {
+            cookieId,
+            notify: false,
+            CreatedAt: new Date(),
+            UpdatedAt: new Date()
+          };
+          const result = await usersCollection.insertOne(user);
+          user._id = result.insertedId;
+          console.debug(`[AUTH] Usuario creado en DB: ${user._id}`);
+        }
+
+        req.user = user;
+        next();
+      } catch (err) {
+        console.error('[AUTH] Error:', err);
+        res.status(500).send('Error de autenticación');
+      }
+    });
+
     // Configuración dinámica de rutas
     const routes = [
       { path: '/tasks', router: './routes/tasks' },
       { path: '/update', router: './routes/update' },
       { path: '/delete', router: './routes/delete' },
       { path: '/date', router: './routes/date' },
-      { path: '/deadline', router: './routes/deadline' }
+      { path: '/deadline', router: './routes/deadline' },
+      { path: '/notify', router: './routes/notify' },
     ];
 
     routes.forEach(({ path, router }) => {
       app.use(path, require(router)(db));
       console.debug(`[ROUTE] Ruta configurada: ${path}`);
     });
+
 
     // Middleware para manejo de errores 404
     app.use((req, res) => {

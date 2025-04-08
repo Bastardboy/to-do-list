@@ -62,13 +62,14 @@ const TaskList = ({
   return (
     <div className="container mx-auto">
       <TaskOrder 
+        cookieId={cookieId}
         sortConfig={sortConfig}
         onSortChange={handleSortChange}
         notifyEnabled={notifyEnabled}
         onToggleNotifications={onToggleNotifications}
         notificationLoading={notificationLoading}
         notificationError={notificationError}
-        cookieId={cookieId}
+        
       />
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 items-start">

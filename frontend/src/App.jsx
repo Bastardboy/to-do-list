@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import TaskList from './components/TaskList/TaskList';
 import TaskForm from './components/TaskForm/TaskForm';
-import { NotificationProvider } from './components/TaskNotification/NotificationContext';
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
@@ -45,10 +44,16 @@ const App = () => {
   };
 
   useEffect(() => {
+    // Recuperamos el estado de las notificaciones desde localStorage al cargar la página
+    const savedNotificationStatus = localStorage.getItem('notifyEnabled');
+    if (savedNotificationStatus) {
+      setNotifyEnabled(JSON.parse(savedNotificationStatus)); // Convertimos el valor de localStorage a booleano
+    }
+  
     fetchTasks();
     fetchNotificationStatus();
   
-    // 🔧 Registrar el Service Worker
+    // Registrar el Service Worker (ya existente)
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
         .register('/sw.js')
@@ -101,31 +106,39 @@ const App = () => {
     setNotificationLoading(true);
     try {
       const newStatus = !notifyEnabled;
-
+  
+      console.log("Nuevo estado de notificación:", newStatus);
+  
       if (newStatus && shouldSendNotification()) {
+        console.log("Intentando enviar notificación...");
+  
         if (!('Notification' in window)) {
           setNotificationError('Navegador no compatible');
           return;
         }
-
+  
         if (Notification.permission === 'denied') {
           setNotificationError('Permiso denegado previamente');
           return;
         }
-
+  
         if (Notification.permission !== 'granted') {
           const permission = await Notification.requestPermission();
+          console.log("Permiso de notificación:", permission);
           if (permission !== 'granted') {
             setNotificationError('Permiso no concedido');
             return;
           }
         }
-
+  
+        // Enviar la notificación aquí
+        console.log("Enviando la notificación...");
         updateLastNotificationDate();
       }
-
-      const response = await axios.patch('/api/notify', { enabled: newStatus }, { withCredentials: true });
+  
+      // Actualizamos el estado y también en localStorage
       setNotifyEnabled(newStatus);
+      localStorage.setItem('notifyEnabled', JSON.stringify(newStatus)); // Guardamos en localStorage
       setNotificationError(null);
     } catch (err) {
       setNotificationError('Error al actualizar');
@@ -134,6 +147,8 @@ const App = () => {
       setNotificationLoading(false);
     }
   };
+  
+  
 
   const fetchDelete = async (taskId) => {
     try {
@@ -300,5 +315,6 @@ const App = () => {
     </div>
   );
 };
+
 
 export default App;
